@@ -1,4 +1,7 @@
 using API.Data;
+using API.Extensions;
+using API.Interfaces;
+using API.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -17,6 +20,8 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplicationServices(_config);
+            services.AddScoped<ITokenService, TokenSerice>();
             services.AddDbContext<DataContext>(options =>
             {
                 options.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
@@ -26,7 +31,9 @@ namespace API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
             });
+            services.AddControllers();
             services.AddCors();
+            services.AddIdentityServices(_config);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +52,7 @@ namespace API
 
             app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
