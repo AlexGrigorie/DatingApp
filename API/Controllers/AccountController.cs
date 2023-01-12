@@ -1,4 +1,4 @@
-﻿using API.Data;
+using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
@@ -9,17 +9,16 @@ using System.Text;
 
 namespace API.Controllers
 {
-    public class AccountContoller : BaseApiController
+    public class AccountController : BaseApiController
     {
-        private readonly DataContext _dataContext;
+        private readonly DataContext _context;
         private readonly ITokenService _tokenService;
 
-        public AccountContoller(DataContext context, ITokenService tokenService)
+        public AccountController(DataContext context, ITokenService tokenService)
         {
-            this._dataContext = context;
-            this._tokenService = tokenService;
+            _tokenService = tokenService;
+            _context = context;
         }
-
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
@@ -34,8 +33,8 @@ namespace API.Controllers
                 PsswordSalt = hmac.Key
             };
 
-            _dataContext.Users.Add(user);
-            await _dataContext.SaveChangesAsync();
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
             return new UserDto
             {
@@ -47,7 +46,7 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _dataContext.Users.SingleOrDefaultAsync(x => x.UserName == loginDto.Username);
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == loginDto.Username);
 
             if (user == null) return Unauthorized("Invalid username");
 
@@ -70,7 +69,7 @@ namespace API.Controllers
 
         private async Task<bool> UserExists(string username)
         {
-            return await _dataContext.Users.AnyAsync(x => x.UserName == username.ToLower());
+            return await _context.Users.AnyAsync(x => x.UserName == username.ToLower());
         }
     }
 }
