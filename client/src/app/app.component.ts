@@ -12,7 +12,7 @@ export class AppComponent {
   title = 'Dating App';
   users: any;
   constructor(private accountSerivce: AccountService) {
-    // super();
+
   }
 
   ngOnInit(): void {
