@@ -21,6 +21,6 @@ export class AppComponent {
 
   setCurrentUser() {
     const user: User = JSON.parse(localStorage.getItem('user'));
-    this.accountSerivce.serCurrentUser(user);
+    this.accountSerivce.setCurrentUser(user);
   }
 }
