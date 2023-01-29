@@ -13,7 +13,9 @@
         >
           <i class="fa fa-user">user</i>
         </button>
-        <button class="btn btn-primary"><i class="fa fa-heart">like</i></button>
+        <button (click)="addLike(member)" class="btn btn-primary">
+          <i class="fa fa-heart">like</i>
+        </button>
         <button class="btn btn-primary">
           <i class="fa fa-envelope">email</i>
         </button>
@@ -22,7 +24,7 @@
   </div>
   <div class="card-body p-1">
     <h6 class="card-title text-center mb-1">
-      <i class="fa fa-user-circle-o"></i>{{ member.knownAs }}, {{member.age}}
+      <i class="fa fa-user-circle-o"></i>{{ member.knownAs }}, {{ member.age }}
     </h6>
     <p class="card-text text-muted text-center">{{ member.city }}</p>
   </div>
